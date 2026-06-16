@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FoodRush — Website UI Redesign | Thiranex Internship Week 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --orange: #FF6B21;
+    --orange-light: #FF8C4B;
+    --orange-pale: #FFF3EC;
+    --dark: #0F0F0F;
+    --dark2: #1A1A1A;
+    --gray: #6B6B6B;
+    --gray-light: #F4F4F4;
+    --white: #FFFFFF;
+    --green: #2EB872;
+    --blue: #3378F5;
+    --border: #E8E8E8;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); line-height: 1.6; }
+
+  /* HERO */
+  .hero {
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,107,33,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,107,33,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,107,33,0.12); border: 1px solid rgba(255,107,33,0.25);
+    color: var(--orange); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px 16px; border-radius: 100px; margin-bottom: 40px; width: fit-content;
+  }
+  .hero-tag::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 800; color: var(--white);
+    line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 24px;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero-desc {
+    font-size: 18px; color: rgba(255,255,255,0.55);
+    max-width: 580px; margin-bottom: 56px; font-weight: 300; line-height: 1.7;
+  }
+  .hero-meta { display: flex; gap: 40px; flex-wrap: wrap; margin-bottom: 48px; }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.3); }
+  .meta-value { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.85); }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--orange); color: white;
+    padding: 16px 32px; border-radius: 100px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: all 0.2s; width: fit-content;
+  }
+  .hero-cta:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,33,0.35); }
+  .week-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.6); font-size: 12px;
+    padding: 6px 14px; border-radius: 100px; margin-bottom: 16px; width: fit-content;
+  }
+
+  /* NAV */
+  .sticky-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px; display: flex; align-items: center;
+    justify-content: space-between; height: 60px;
+  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 13px; font-weight: 500; color: var(--gray);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-badge {
+    background: var(--orange-pale); color: var(--orange);
+    font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 100px;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 60px;
+    border-bottom: 1px solid var(--border);
+    max-width: 1200px; margin: 0 auto;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--orange); margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .section-sub { font-size: 17px; color: var(--gray); max-width: 560px; font-weight: 300; margin-bottom: 56px; }
+
+  /* HEURISTIC TABLE */
+  .heuristic-table { width: 100%; border-collapse: collapse; }
+  .heuristic-table th {
+    background: var(--dark); color: white;
+    padding: 14px 16px; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; text-align: left;
+  }
+  .heuristic-table th:first-child { border-radius: 8px 0 0 0; width: 40px; }
+  .heuristic-table th:last-child { border-radius: 0 8px 0 0; }
+  .heuristic-table td {
+    padding: 14px 16px; font-size: 14px;
+    border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  .heuristic-table tr:nth-child(even) td { background: var(--orange-pale); }
+  .heuristic-table tr:hover td { background: #fff8f4; }
+  .severity { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+  .severity-high { background: #FFE5E5; color: #D32F2F; }
+  .severity-med { background: #FFF3CD; color: #856404; }
+  .severity-low { background: #E8F5E9; color: #2E7D32; }
+  .fix-tag { color: var(--green); font-weight: 500; }
+
+  /* STYLE GUIDE */
+  .colors-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px; }
+  .color-swatch {
+    border-radius: 12px; padding: 24px 20px; min-height: 100px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .color-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .color-hex { font-size: 12px; opacity: 0.7; font-family: monospace; }
+
+  .type-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 48px; }
+  .type-card {
+    border: 1px solid var(--border); border-radius: 12px; padding: 24px;
+  }
+  .type-sample { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 8px; color: var(--dark); }
+  .type-body-sample { font-size: 16px; color: var(--gray); margin-bottom: 8px; }
+  .type-meta { font-size: 12px; color: var(--gray); }
+  .type-meta span { color: var(--orange); font-weight: 600; }
+
+  .components-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .component-card {
+    border: 1px solid var(--border); border-radius: 12px; padding: 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .component-preview { background: var(--gray-light); border-radius: 8px; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 80px; }
+  .btn-primary { background: var(--orange); color: white; padding: 12px 24px; border-radius: 100px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; }
+  .btn-secondary { background: white; color: var(--orange); padding: 12px 24px; border-radius: 100px; font-size: 14px; font-weight: 600; border: 2px solid var(--orange); cursor: pointer; }
+  .input-preview { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--gray); background: white; }
+  .card-preview { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px; width: 100%; }
+  .card-preview-img { background: var(--border); border-radius: 8px; height: 60px; margin-bottom: 10px; }
+  .card-preview-title { font-size: 13px; font-weight: 600; }
+  .card-preview-sub { font-size: 11px; color: var(--gray); }
+  .component-name { font-size: 14px; font-weight: 600; }
+  .component-spec { font-size: 12px; color: var(--gray); }
+
+  /* SCREENS */
+  .screens-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .screen-card {
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+  }
+  .screen-mockup {
+    background: var(--gray-light); height: 280px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .screen-mockup-inner {
+    background: white; border-radius: 8px; width: 85%; height: 85%;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .mockup-nav { background: var(--dark); height: 36px; display: flex; align-items: center; padding: 0 12px; gap: 8px; }
+  .mockup-nav-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .mockup-hero { flex: 0 0 90px; background: linear-gradient(135deg, var(--dark) 0%, #1a1a1a 100%); display: flex; align-items: center; padding: 12px; gap: 10px; }
+  .mockup-hero-text { flex: 1; }
+  .mockup-hero-text .t1 { background: rgba(255,255,255,0.8); height: 10px; border-radius: 4px; width: 80%; margin-bottom: 6px; }
+  .mockup-hero-text .t2 { background: rgba(255,255,255,0.4); height: 8px; border-radius: 4px; width: 60%; margin-bottom: 8px; }
+  .mockup-cta { background: var(--orange); border-radius: 100px; height: 22px; width: 70px; }
+  .mockup-img { width: 60px; height: 60px; background: rgba(255,107,33,0.3); border-radius: 8px; }
+  .mockup-body { flex: 1; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .mockup-search { background: var(--gray-light); border-radius: 6px; height: 28px; }
+  .mockup-row { display: flex; gap: 8px; }
+  .mockup-card { background: var(--gray-light); border-radius: 6px; flex: 1; height: 50px; }
+  .mockup-card.orange { background: rgba(255,107,33,0.15); }
+
+  /* Restaurant mockup */
+  .mockup-rest-header { flex: 0 0 70px; background: linear-gradient(135deg, #1a0a00 0%, #2a1000 100%); display: flex; align-items: flex-end; padding: 10px 12px; }
+  .mockup-rest-info { display: flex; gap: 6px; align-items: center; }
+  .mockup-badge { background: var(--green); border-radius: 4px; height: 16px; width: 36px; }
+  .mockup-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+  .mockup-tab { flex: 1; height: 24px; display: flex; align-items: center; justify-content: center; }
+  .mockup-tab.active { border-bottom: 2px solid var(--orange); }
+  .mockup-tab-dot { background: var(--gray-light); height: 8px; width: 40px; border-radius: 4px; }
+  .mockup-tab.active .mockup-tab-dot { background: var(--orange); }
+  .mockup-items { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px; }
+  .mockup-item { display: flex; gap: 8px; align-items: center; }
+  .mockup-item-img { width: 36px; height: 36px; background: var(--gray-light); border-radius: 6px; flex-shrink: 0; }
+  .mockup-item-text { flex: 1; }
+  .mockup-item-t1 { background: var(--gray-light); height: 8px; border-radius: 4px; width: 80%; margin-bottom: 4px; }
+  .mockup-item-t2 { background: var(--gray-light); height: 7px; border-radius: 4px; width: 50%; }
+  .mockup-add { background: var(--orange); width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0; }
+
+  /* Checkout mockup */
+  .mockup-steps { display: flex; padding: 10px 12px; gap: 0; align-items: center; }
+  .mockup-step { width: 20px; height: 20px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; }
+  .mockup-step-line { flex: 1; height: 2px; background: var(--border); }
+  .mockup-step-line.done { background: var(--orange); }
+  .mockup-step.inactive { background: var(--gray-light); }
+  .mockup-form { padding: 8px 12px; display: flex; flex-direction: column; gap: 6px; }
+  .mockup-field { background: var(--gray-light); border-radius: 6px; height: 28px; }
+  .mockup-field.half { width: 48%; }
+  .mockup-fields-row { display: flex; gap: 6px; }
+  .mockup-pay-opts { display: flex; gap: 6px; margin-top: 4px; }
+  .mockup-pay { background: var(--gray-light); border-radius: 6px; flex: 1; height: 32px; }
+  .mockup-pay.selected { background: var(--orange-pale); border: 1px solid var(--orange); }
+  .mockup-submit { background: var(--orange); border-radius: 100px; height: 32px; margin: 8px 12px; }
+
+  /* Tracking mockup */
+  .mockup-map { flex: 0 0 110px; background: linear-gradient(135deg, #e8f0e8 0%, #d4e8d4 100%); position: relative; overflow: hidden; }
+  .mockup-map-road { position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.8); transform: translateY(-50%) rotate(-10deg); }
+  .mockup-map-pin { position: absolute; top: 30%; right: 25%; width: 12px; height: 12px; background: var(--orange); border-radius: 50%; border: 2px solid white; }
+  .mockup-map-dest { position: absolute; bottom: 30%; left: 25%; width: 10px; height: 10px; background: var(--green); border-radius: 50%; border: 2px solid white; }
+  .mockup-driver { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .mockup-driver-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--gray-light); }
+  .mockup-driver-info { flex: 1; }
+  .mockup-driver-t1 { background: var(--gray-light); height: 8px; border-radius: 4px; width: 70%; margin-bottom: 4px; }
+  .mockup-driver-t2 { background: var(--gray-light); height: 6px; border-radius: 4px; width: 50%; }
+  .mockup-stars { display: flex; gap: 2px; }
+  .mockup-star { width: 8px; height: 8px; background: #FFB800; border-radius: 1px; }
+  .mockup-progress { padding: 8px 12px; }
+  .mockup-prog-steps { display: flex; flex-direction: column; gap: 6px; }
+  .mockup-prog-step { display: flex; align-items: center; gap: 8px; }
+  .mockup-prog-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .mockup-prog-line-v { width: 2px; height: 12px; background: var(--border); margin-left: 3px; }
+  .mockup-prog-text { background: var(--gray-light); height: 7px; border-radius: 4px; flex: 1; }
+
+  .screen-info { padding: 20px 24px; }
+  .screen-num { font-size: 11px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .screen-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .screen-desc { font-size: 14px; color: var(--gray); line-height: 1.5; margin-bottom: 12px; }
+  .screen-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .screen-tag { background: var(--gray-light); color: var(--dark); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 100px; }
+
+  /* RESPONSIVE */
+  .responsive-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .responsive-card {
+    border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-align: center;
+  }
+  .resp-icon { font-size: 32px; margin-bottom: 16px; }
+  .resp-bp { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+  .resp-width { font-size: 13px; color: var(--orange); font-weight: 600; margin-bottom: 16px; }
+  .resp-feature { font-size: 13px; color: var(--gray); padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .resp-feature:last-child { border-bottom: none; }
+
+  /* FIGMA CTA */
+  .figma-cta-section {
+    background: var(--dark); border-radius: 24px; padding: 64px;
+    text-align: center; margin: 0 60px;
+    position: relative; overflow: hidden;
+  }
+  .figma-cta-section::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,107,33,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .figma-cta-section h2 {
+    font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800;
+    color: white; margin-bottom: 16px;
+  }
+  .figma-cta-section h2 span { color: var(--orange); }
+  .figma-cta-section p { color: rgba(255,255,255,0.5); font-size: 16px; margin-bottom: 40px; font-weight: 300; }
+  .figma-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--orange); color: white;
+    padding: 18px 40px; border-radius: 100px;
+    font-size: 16px; font-weight: 600; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .figma-btn:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,33,0.4); }
+
+  /* DESIGN THINKING */
+  .dt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+  .dt-step {
+    padding: 28px 20px; border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .dt-step:last-child { border-right: none; }
+  .dt-num { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.1em; margin-bottom: 12px; }
+  .dt-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .dt-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+  .dt-tag { display: inline-block; background: var(--orange-pale); color: var(--orange); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 100px; margin-top: 10px; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark); padding: 48px 60px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+  }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: white; margin-bottom: 8px; }
+  .footer-logo span { color: var(--orange); }
+  .footer-sub { font-size: 13px; color: rgba(255,255,255,0.35); }
+  .footer-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .footer-tag { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 500; padding: 6px 14px; border-radius: 100px; }
+
+  @media (max-width: 768px) {
+    section { padding: 60px 20px; }
+    .hero { padding: 60px 20px; }
+    .sticky-nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .screens-grid { grid-template-columns: 1fr; }
+    .colors-grid { grid-template-columns: repeat(2, 1fr); }
+    .type-grid { grid-template-columns: 1fr; }
+    .components-grid { grid-template-columns: 1fr; }
+    .responsive-grid { grid-template-columns: 1fr; }
+    .dt-grid { grid-template-columns: 1fr; }
+    .dt-step { border-right: none; border-bottom: 1px solid var(--border); }
+    .figma-cta-section { margin: 0 20px; padding: 40px 24px; }
+    .footer { padding: 40px 20px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="week-badge">Thiranex UI/UX Internship · Week 2</div>
+  <div class="hero-tag">Website UI Redesign</div>
+  <h1>Food<span>Rush</span><br/>Website<br/>Redesign</h1>
+  <p class="hero-desc">A complete high-fidelity UI redesign of the FoodRush food delivery website — improving visual hierarchy, usability, and responsive layout across all breakpoints.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-label">Intern</span><span class="meta-value">Teku Triveni</span></div>
+    <div class="meta-item"><span class="meta-label">Domain</span><span class="meta-value">UI/UX Design</span></div>
+    <div class="meta-item"><span class="meta-label">Week</span><span class="meta-value">Week 2</span></div>
+    <div class="meta-item"><span class="meta-label">Submitted</span><span class="meta-value">16 June 2026</span></div>
+    <div class="meta-item"><span class="meta-label">Tool</span><span class="meta-value">Figma</span></div>
+  </div>
+  <a href="https://www.figma.com/proto/oGuuVQGk0PJoUFc6uZUUdO/Food-delivery-app-Ui-kit--Community---Copy-?node-id=513-21&t=9N4meJgwsCFiGfYD-1" target="_blank" class="hero-cta">View Figma Prototype →</a>
+</section>
+
+<!-- NAV -->
+<nav class="sticky-nav">
+  <div class="nav-logo">Food<span>Rush</span></div>
+  <div class="nav-links">
+    <a href="#heuristic">Heuristic</a>
+    <a href="#styleguide">Style Guide</a>
+    <a href="#screens">Screens</a>
+    <a href="#responsive">Responsive</a>
+    <a href="#figma">Figma</a>
+  </div>
+  <span class="nav-badge">Week 2</span>
+</nav>
+
+<!-- HEURISTIC EVALUATION -->
+<section id="heuristic">
+  <div class="section-label">Usability Audit</div>
+  <h2 class="section-title">Heuristic Evaluation</h2>
+  <p class="section-sub">8 usability issues identified using Nielsen's 10 Usability Heuristics on existing food delivery interfaces.</p>
+  <table class="heuristic-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Heuristic</th>
+        <th>Issue Found</th>
+        <th>Severity</th>
+        <th>Redesign Fix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Visibility of System Status</strong></td><td>No loading indicators or order progress feedback</td><td><span class="severity severity-high">High</span></td><td class="fix-tag">✓ Added progress bar and live status badges</td></tr>
+      <tr><td>2</td><td><strong>Match Between System & Real World</strong></td><td>Technical labels like "SKU" confuse everyday users</td><td><span class="severity severity-med">Medium</span></td><td class="fix-tag">✓ Replaced with plain language throughout</td></tr>
+      <tr><td>3</td><td><strong>User Control & Freedom</strong></td><td>No easy way to remove or edit cart items</td><td><span class="severity severity-high">High</span></td><td class="fix-tag">✓ Added inline edit, delete, and undo</td></tr>
+      <tr><td>4</td><td><strong>Consistency & Standards</strong></td><td>Inconsistent button sizes and styles across pages</td><td><span class="severity severity-med">Medium</span></td><td class="fix-tag">✓ Unified button component system</td></tr>
+      <tr><td>5</td><td><strong>Error Prevention</strong></td><td>No order review step before final payment</td><td><span class="severity severity-high">High</span></td><td class="fix-tag">✓ Added mandatory order review screen</td></tr>
+      <tr><td>6</td><td><strong>Recognition over Recall</strong></td><td>Menu categories disappear on scroll</td><td><span class="severity severity-med">Medium</span></td><td class="fix-tag">✓ Sticky category tabs always visible</td></tr>
+      <tr><td>7</td><td><strong>Flexibility & Efficiency</strong></td><td>No quick reorder option for returning users</td><td><span class="severity severity-low">Low</span></td><td class="fix-tag">✓ "Order Again" section on home screen</td></tr>
+      <tr><td>8</td><td><strong>Aesthetic & Minimalist Design</strong></td><td>Cluttered home screen with excessive banners</td><td><span class="severity severity-med">Medium</span></td><td class="fix-tag">✓ Reduced banners, added whitespace</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- STYLE GUIDE -->
+<section id="styleguide">
+  <div class="section-label">Design System</div>
+  <h2 class="section-title">Style Guide</h2>
+  <p class="section-sub">A consistent design language built for FoodRush — warm, energetic, and food-first.</p>
+
+  <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px;">Color Palette</h3>
+  <div class="colors-grid">
+    <div class="color-swatch" style="background:#FF6B21;"><div class="color-name" style="color:white;">Primary Orange</div><div class="color-hex" style="color:rgba(255,255,255,0.7);">#FF6B21</div></div>
+    <div class="color-swatch" style="background:#0F0F0F;"><div class="color-name" style="color:white;">Dark Black</div><div class="color-hex" style="color:rgba(255,255,255,0.5);">#0F0F0F</div></div>
+    <div class="color-swatch" style="background:#FFF3EC;border:1px solid #E8E8E8;"><div class="color-name" style="color:#FF6B21;">Light Peach</div><div class="color-hex" style="color:#6B6B6B;">#FFF3EC</div></div>
+    <div class="color-swatch" style="background:#2EB872;"><div class="color-name" style="color:white;">Success Green</div><div class="color-hex" style="color:rgba(255,255,255,0.7);">#2EB872</div></div>
+  </div>
+
+  <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px;">Typography</h3>
+  <div class="type-grid">
+    <div class="type-card">
+      <div class="type-sample">Syne</div>
+      <div style="font-size:13px;color:var(--gray);margin-bottom:12px;">Headings & Display</div>
+      <div class="type-meta">Weights: <span>700, 800</span> · Sizes: <span>32–88px</span></div>
+      <div class="type-meta" style="margin-top:4px;">Usage: <span>H1, H2, Logo, Hero text</span></div>
+    </div>
+    <div class="type-card">
+      <div class="type-body-sample">DM Sans — The quick brown fox</div>
+      <div style="font-size:13px;color:var(--gray);margin-bottom:12px;">Body & UI Text</div>
+      <div class="type-meta">Weights: <span>300, 400, 500, 600</span> · Sizes: <span>12–18px</span></div>
+      <div class="type-meta" style="margin-top:4px;">Usage: <span>Body, labels, buttons, captions</span></div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px;">UI Components</h3>
+  <div class="components-grid">
+    <div class="component-card">
+      <div class="component-preview"><button class="btn-primary">Order Now</button></div>
+      <div class="component-name">Primary Button</div>
+      <div class="component-spec">Orange · Pill · DM Sans 600 · 14px</div>
+    </div>
+    <div class="component-card">
+      <div class="component-preview"><button class="btn-secondary">View Menu</button></div>
+      <div class="component-name">Secondary Button</div>
+      <div class="component-spec">White + Orange border · Pill · 14px</div>
+    </div>
+    <div class="component-card">
+      <div class="component-preview"><input class="input-preview" placeholder="Search restaurants..." readonly/></div>
+      <div class="component-name">Input Field</div>
+      <div class="component-spec">8px radius · #E8E8E8 border · Focus: orange</div>
+    </div>
+    <div class="component-card">
+      <div class="component-preview">
+        <div class="card-preview">
+          <div class="card-preview-img"></div>
+          <div class="card-preview-title">Burger Palace</div>
+          <div class="card-preview-sub">⭐ 4.5 · 25 min · ₹30 delivery</div>
+        </div>
+      </div>
+      <div class="component-name">Restaurant Card</div>
+      <div class="component-spec">16px radius · 1px border · hover lift</div>
+    </div>
+    <div class="component-card">
+      <div class="component-preview" style="gap:8px;flex-direction:row;">
+        <span style="background:var(--green);color:white;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;">Open</span>
+        <span style="background:#FFE5E5;color:#D32F2F;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;">Closed</span>
+        <span style="background:var(--orange-pale);color:var(--orange);padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;">New</span>
+      </div>
+      <div class="component-name">Status Badges</div>
+      <div class="component-spec">Pill · 11px · 4px 12px padding</div>
+    </div>
+    <div class="component-card">
+      <div class="component-preview" style="flex-direction:column;gap:4px;align-items:flex-start;">
+        <div style="display:flex;gap:4px;align-items:center;">
+          <span style="font-size:18px;color:#FFB800;">★★★★</span><span style="font-size:18px;color:var(--border);">★</span>
+          <span style="font-size:13px;font-weight:600;margin-left:4px;">4.2</span>
+        </div>
+        <span style="font-size:11px;color:var(--gray);">1,284 reviews</span>
+      </div>
+      <div class="component-name">Rating Component</div>
+      <div class="component-spec">Star fill: #FFB800 · Count: DM Sans 600</div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENS -->
+<section id="screens">
+  <div class="section-label">High-Fidelity Mockups</div>
+  <h2 class="section-title">Website Screens</h2>
+  <p class="section-sub">4 key pages redesigned with full visual hierarchy, consistent components, and responsive layouts.</p>
+  <div class="screens-grid">
+
+    <!-- Screen 1: Home -->
+    <div class="screen-card">
+      <div class="screen-mockup">
+        <div class="screen-mockup-inner">
+          <div class="mockup-nav">
+            <div class="mockup-nav-dot" style="background:#ff5f56;"></div>
+            <div class="mockup-nav-dot" style="background:#ffbd2e;"></div>
+            <div class="mockup-nav-dot" style="background:#27c93f;"></div>
+          </div>
+          <div class="mockup-hero">
+            <div class="mockup-hero-text">
+              <div class="t1"></div>
+              <div class="t2"></div>
+              <div class="mockup-cta"></div>
+            </div>
+            <div class="mockup-img"></div>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-search"></div>
+            <div class="mockup-row">
+              <div class="mockup-card orange"></div>
+              <div class="mockup-card"></div>
+              <div class="mockup-card"></div>
+            </div>
+            <div class="mockup-row">
+              <div class="mockup-card"></div>
+              <div class="mockup-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 01</div>
+        <div class="screen-name">Home Page</div>
+        <div class="screen-desc">Hero banner with CTA, category filters, featured restaurants grid, and promotional offers section.</div>
+        <div class="screen-tags">
+          <span class="screen-tag">Hero Banner</span>
+          <span class="screen-tag">Search Bar</span>
+          <span class="screen-tag">Category Grid</span>
+          <span class="screen-tag">Restaurant Cards</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 2: Restaurant -->
+    <div class="screen-card">
+      <div class="screen-mockup">
+        <div class="screen-mockup-inner">
+          <div class="mockup-nav">
+            <div class="mockup-nav-dot" style="background:#ff5f56;"></div>
+            <div class="mockup-nav-dot" style="background:#ffbd2e;"></div>
+            <div class="mockup-nav-dot" style="background:#27c93f;"></div>
+          </div>
+          <div class="mockup-rest-header">
+            <div class="mockup-rest-info">
+              <div class="mockup-badge"></div>
+            </div>
+          </div>
+          <div class="mockup-tabs">
+            <div class="mockup-tab active"><div class="mockup-tab-dot"></div></div>
+            <div class="mockup-tab"><div class="mockup-tab-dot"></div></div>
+            <div class="mockup-tab"><div class="mockup-tab-dot"></div></div>
+            <div class="mockup-tab"><div class="mockup-tab-dot"></div></div>
+          </div>
+          <div class="mockup-items">
+            <div class="mockup-item"><div class="mockup-item-img"></div><div class="mockup-item-text"><div class="mockup-item-t1"></div><div class="mockup-item-t2"></div></div><div class="mockup-add"></div></div>
+            <div class="mockup-item"><div class="mockup-item-img"></div><div class="mockup-item-text"><div class="mockup-item-t1"></div><div class="mockup-item-t2"></div></div><div class="mockup-add"></div></div>
+            <div class="mockup-item"><div class="mockup-item-img"></div><div class="mockup-item-text"><div class="mockup-item-t1"></div><div class="mockup-item-t2"></div></div><div class="mockup-add"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 02</div>
+        <div class="screen-name">Restaurant Page</div>
+        <div class="screen-desc">Sticky category tabs, image-led menu items with quick-add buttons, ratings and reviews section.</div>
+        <div class="screen-tags">
+          <span class="screen-tag">Sticky Tabs</span>
+          <span class="screen-tag">Menu Items</span>
+          <span class="screen-tag">Quick Add</span>
+          <span class="screen-tag">Reviews</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3: Checkout -->
+    <div class="screen-card">
+      <div class="screen-mockup">
+        <div class="screen-mockup-inner">
+          <div class="mockup-nav">
+            <div class="mockup-nav-dot" style="background:#ff5f56;"></div>
+            <div class="mockup-nav-dot" style="background:#ffbd2e;"></div>
+            <div class="mockup-nav-dot" style="background:#27c93f;"></div>
+          </div>
+          <div class="mockup-steps">
+            <div class="mockup-step"><div style="width:8px;height:8px;border-radius:50%;background:white;"></div></div>
+            <div class="mockup-step-line done"></div>
+            <div class="mockup-step"><div style="width:8px;height:8px;border-radius:50%;background:white;"></div></div>
+            <div class="mockup-step-line"></div>
+            <div class="mockup-step inactive"></div>
+          </div>
+          <div class="mockup-form">
+            <div class="mockup-field"></div>
+            <div class="mockup-fields-row">
+              <div class="mockup-field half"></div>
+              <div class="mockup-field half"></div>
+            </div>
+            <div class="mockup-field"></div>
+            <div class="mockup-pay-opts">
+              <div class="mockup-pay selected"></div>
+              <div class="mockup-pay"></div>
+              <div class="mockup-pay"></div>
+            </div>
+          </div>
+          <div class="mockup-submit"></div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 03</div>
+        <div class="screen-name">Cart & Checkout</div>
+        <div class="screen-desc">3-step progress indicator, address form, multiple payment options, and order review before confirmation.</div>
+        <div class="screen-tags">
+          <span class="screen-tag">Progress Steps</span>
+          <span class="screen-tag">Address Form</span>
+          <span class="screen-tag">Payment</span>
+          <span class="screen-tag">Order Review</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 4: Tracking -->
+    <div class="screen-card">
+      <div class="screen-mockup">
+        <div class="screen-mockup-inner">
+          <div class="mockup-nav">
+            <div class="mockup-nav-dot" style="background:#ff5f56;"></div>
+            <div class="mockup-nav-dot" style="background:#ffbd2e;"></div>
+            <div class="mockup-nav-dot" style="background:#27c93f;"></div>
+          </div>
+          <div class="mockup-map">
+            <div class="mockup-map-road"></div>
+            <div class="mockup-map-pin"></div>
+            <div class="mockup-map-dest"></div>
+          </div>
+          <div class="mockup-driver">
+            <div class="mockup-driver-avatar"></div>
+            <div class="mockup-driver-info">
+              <div class="mockup-driver-t1"></div>
+              <div class="mockup-stars"><div class="mockup-star"></div><div class="mockup-star"></div><div class="mockup-star"></div><div class="mockup-star"></div><div class="mockup-star" style="background:var(--border);"></div></div>
+            </div>
+          </div>
+          <div class="mockup-progress">
+            <div class="mockup-prog-steps">
+              <div class="mockup-prog-step"><div class="mockup-prog-dot" style="background:var(--green);"></div><div class="mockup-prog-text" style="background:var(--green);opacity:0.3;"></div></div>
+              <div class="mockup-prog-line-v"></div>
+              <div class="mockup-prog-step"><div class="mockup-prog-dot" style="background:var(--orange);"></div><div class="mockup-prog-text" style="background:var(--orange);opacity:0.3;"></div></div>
+              <div class="mockup-prog-line-v"></div>
+              <div class="mockup-prog-step"><div class="mockup-prog-dot" style="background:var(--border);"></div><div class="mockup-prog-text"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 04</div>
+        <div class="screen-name">Order Tracking</div>
+        <div class="screen-desc">Live map view, driver info with rating, real-time progress timeline, and ETA countdown.</div>
+        <div class="screen-tags">
+          <span class="screen-tag">Live Map</span>
+          <span class="screen-tag">Driver Info</span>
+          <span class="screen-tag">Progress</span>
+          <span class="screen-tag">ETA</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESPONSIVE -->
+<section id="responsive">
+  <div class="section-label">Responsive Design</div>
+  <h2 class="section-title">Layout Strategy</h2>
+  <p class="section-sub">Mobile-first approach with three breakpoints ensuring seamless experience across all devices.</p>
+  <div class="responsive-grid">
+    <div class="responsive-card">
+      <div class="resp-icon">🖥️</div>
+      <div class="resp-bp">Desktop</div>
+      <div class="resp-width">1440px +</div>
+      <div class="resp-feature">4-column restaurant grid</div>
+      <div class="resp-feature">Full sticky navigation</div>
+      <div class="resp-feature">Side filter panel</div>
+      <div class="resp-feature">Horizontal category scroll</div>
+      <div class="resp-feature">Split checkout layout</div>
+    </div>
+    <div class="responsive-card" style="border-color:var(--orange);">
+      <div class="resp-icon">💻</div>
+      <div class="resp-bp">Tablet</div>
+      <div class="resp-width">768px – 1439px</div>
+      <div class="resp-feature">2-column restaurant grid</div>
+      <div class="resp-feature">Hamburger menu</div>
+      <div class="resp-feature">Collapsed filter sidebar</div>
+      <div class="resp-feature">Stacked checkout form</div>
+      <div class="resp-feature">Touch-friendly targets</div>
+    </div>
+    <div class="responsive-card">
+      <div class="resp-icon">📱</div>
+      <div class="resp-bp">Mobile</div>
+      <div class="resp-width">below 768px</div>
+      <div class="resp-feature">1-column full-width cards</div>
+      <div class="resp-feature">Bottom navigation bar</div>
+      <div class="resp-feature">Swipe gestures</div>
+      <div class="resp-feature">Full-screen checkout</div>
+      <div class="resp-feature">Thumb-zone optimized</div>
+    </div>
+  </div>
+</section>
+
+<!-- FIGMA CTA -->
+<div id="figma" style="padding:80px 0;">
+  <div class="figma-cta-section">
+    <h2>View the Full <span>Figma</span> Prototype</h2>
+    <p>All 4 screens with interactions, components, and design system — live on Figma.</p>
+    <a href="https://www.figma.com/proto/oGuuVQGk0PJoUFc6uZUUdO/Food-delivery-app-Ui-kit--Community---Copy-?node-id=513-21&t=9N4meJgwsCFiGfYD-1" target="_blank" class="figma-btn">Open Figma Prototype →</a>
+  </div>
+</div>
+
+<!-- DESIGN THINKING -->
+<section>
+  <div class="section-label">Process</div>
+  <h2 class="section-title">Design Thinking</h2>
+  <p class="section-sub">Five-stage design thinking framework applied to the FoodRush website redesign.</p>
+  <div class="dt-grid">
+    <div class="dt-step">
+      <div class="dt-num">01</div>
+      <div class="dt-title">Empathize</div>
+      <div class="dt-desc">Heuristic evaluation on existing food delivery websites. Identified pain points via Nielsen's 10 heuristics.</div>
+      <span class="dt-tag">Research</span>
+    </div>
+    <div class="dt-step">
+      <div class="dt-num">02</div>
+      <div class="dt-title">Define</div>
+      <div class="dt-desc">Core problem: cluttered UI, inconsistent components, and poor visual hierarchy causing high bounce rate.</div>
+      <span class="dt-tag">Problem Statement</span>
+    </div>
+    <div class="dt-step">
+      <div class="dt-num">03</div>
+      <div class="dt-title">Ideate</div>
+      <div class="dt-desc">Explored 3 layout directions. Selected card-heavy grid for maximum food visibility and user familiarity.</div>
+      <span class="dt-tag">Ideation</span>
+    </div>
+    <div class="dt-step">
+      <div class="dt-num">04</div>
+      <div class="dt-title">Prototype</div>
+      <div class="dt-desc">High-fidelity mockups for 4 key pages with complete design system, component library and style guide.</div>
+      <span class="dt-tag">Figma</span>
+    </div>
+    <div class="dt-step">
+      <div class="dt-num">05</div>
+      <div class="dt-title">Test</div>
+      <div class="dt-desc">A/B testing planned for hero layout. 5 user testing sessions scheduled to validate navigation redesign.</div>
+      <span class="dt-tag">Planned</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>
+    <div class="footer-logo">Food<span>Rush</span></div>
+    <div class="footer-sub">Thiranex Internship · Week 2: Website UI Redesign · Teku Triveni · 16 June 2026</div>
+  </div>
+  <div class="footer-tags">
+    <span class="footer-tag">Figma</span>
+    <span class="footer-tag">UI/UX Design</span>
+    <span class="footer-tag">Heuristic Evaluation</span>
+    <span class="footer-tag">Responsive Design</span>
+    <span class="footer-tag">Style Guide</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 # 🍔 FoodRush — UI/UX Design Internship @ Thiranex
 
 ![FoodRush Banner](https://img.shields.io/badge/FoodRush-UI%2FUX%20Design-FF6B21?style=for-the-badge&logo=figma&logoColor=white)
-![Week](https://img.shields.io/badge/Week-1%20%26%202-0F0F0F?style=for-the-badge)
+![Week](https://img.shields.io/badge/Week-1%20%7C%202%20%7C%203-0F0F0F?style=for-the-badge)
 ![Intern](https://img.shields.io/badge/Intern-Teku%20Triveni-FF6B21?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Completed-2EB872?style=for-the-badge)
 
@@ -21,7 +21,7 @@
 
 ## 📁 Project — FoodRush Food Delivery App
 
-> A complete UI/UX design project for **FoodRush** — a food delivery platform. From low-fidelity mobile wireframes to high-fidelity website redesign.
+> A complete UI/UX design project for **FoodRush** — a food delivery platform. From low-fidelity mobile wireframes to high-fidelity website redesign to a fully interactive clickable prototype.
 
 ---
 
@@ -74,7 +74,7 @@ Redesign the FoodRush website UI with high-fidelity mockups, style guide, and re
 
 ### 🎨 Design System
 - **Primary Color** — `#FF6B21` Orange
-- **Dark** — `#0F0F0F` Black  
+- **Dark** — `#0F0F0F` Black
 - **Success** — `#2EB872` Green
 - **Headings** — Syne (700, 800)
 - **Body** — DM Sans (300, 400, 500, 600)
@@ -85,13 +85,55 @@ Redesign the FoodRush website UI with high-fidelity mockups, style guide, and re
 
 ---
 
+## ✅ Week 3 — Interactive Prototype Creation
+
+### 🎯 Objective
+Build a fully clickable interactive prototype to simulate real app interactions and conduct quick user testing.
+
+### 🔍 Key Deliverables
+- ✅ 8 Screens connected with Click interactions
+- ✅ Dissolve transitions between all screens
+- ✅ Complete user journey — Splash to Order Tracking
+- ✅ User Testing (6 scenarios, 3 participants)
+- ✅ Design Refinements based on feedback
+
+### 📱 Prototype Flow
+```
+01 Splash → 02 Onboarding → 03 Home → 04 Restaurant → 05 Cart → 06 Checkout → 07 Confirmed → 08 Tracking
+```
+
+### 🖱️ Interactions Used
+| Interaction | Details |
+|-------------|---------|
+| Trigger | On Click |
+| Action | Navigate To |
+| Animation | Dissolve |
+| Frame Size | 390×844px (iOS/Android) |
+| Starting Point | 01 Splash Screen (Flow 1) |
+
+### 🧪 User Testing Results
+| Scenario | Result |
+|----------|--------|
+| Onboarding Flow | ✅ Pass |
+| Restaurant Discovery | ✅ Pass |
+| Add to Cart | ✅ Pass |
+| Checkout Flow | ⚡ Needs Improvement |
+| Order Confirmation | ✅ Pass |
+| Overall Navigation | ⭐ 4.2 / 5 |
+
+### 🔗 Links
+- 📐 **Figma Prototype** → [Launch Prototype](https://www.figma.com/proto/1Kx5rGvOkhfpDmahPYPEy9/Mobile-app-Wireframing?node-id=5-4&p=f&t=7YgdpUEk9evKCJ6g-1&scaling=min-zoom&content-scaling=fixed&page-id=2%3A2&starting-point-node-id=5%3A4)
+- 🌐 **Live Submission** → [View Page](https://tekutriveni.github.io/THIRANEX-INTERNSHIP-/week3_prototype.html)
+
+---
+
 ## 🧠 Design Thinking Process
 
 ```
 Empathize → Define → Ideate → Prototype → Test
     ↓           ↓        ↓          ↓         ↓
- Research   Problem   Layouts   Figma    Planned
-  Users     Statement  Explore  Mockups   Testing
+ Research   Problem   Layouts   Figma    User Testing
+  Users     Statement  Explore  Mockups   & Refinement
 ```
 
 ---

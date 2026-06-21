@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FoodRush — Interactive Prototype | Thiranex Internship Week 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --orange: #FF6B21;
+    --orange-light: #FF8C4B;
+    --orange-pale: #FFF3EC;
+    --dark: #0F0F0F;
+    --gray: #6B6B6B;
+    --gray-light: #F4F4F4;
+    --white: #FFFFFF;
+    --green: #2EB872;
+    --border: #E8E8E8;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); line-height: 1.6; }
+
+  /* HERO */
+  .hero {
+    background: var(--dark); min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 60px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,107,33,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,107,33,0.12); border: 1px solid rgba(255,107,33,0.25);
+    color: var(--orange); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px 16px; border-radius: 100px; margin-bottom: 40px; width: fit-content;
+  }
+  .hero-tag::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 {
+    font-family: 'Syne', sans-serif; font-size: clamp(48px, 7vw, 88px);
+    font-weight: 800; color: var(--white); line-height: 1.0;
+    letter-spacing: -0.02em; margin-bottom: 24px;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero-desc { font-size: 18px; color: rgba(255,255,255,0.55); max-width: 580px; margin-bottom: 56px; font-weight: 300; line-height: 1.7; }
+  .hero-meta { display: flex; gap: 40px; flex-wrap: wrap; margin-bottom: 48px; }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.3); }
+  .meta-value { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.85); }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--orange); color: white; padding: 16px 32px;
+    border-radius: 100px; font-size: 15px; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,33,0.35); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: white; padding: 16px 32px; border-radius: 100px;
+    font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+  .week-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.6); font-size: 12px;
+    padding: 6px 14px; border-radius: 100px; margin-bottom: 16px; width: fit-content;
+  }
+
+  /* NAV */
+  .sticky-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px; display: flex; align-items: center;
+    justify-content: space-between; height: 60px;
+  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-badge { background: var(--orange-pale); color: var(--orange); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 100px; }
+
+  /* SECTIONS */
+  section { padding: 100px 60px; border-bottom: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .section-sub { font-size: 17px; color: var(--gray); max-width: 560px; font-weight: 300; margin-bottom: 56px; }
+
+  /* FLOW */
+  .flow-container { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin-bottom: 48px; }
+  .flow-screen {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .flow-num {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--orange); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; font-family: 'Syne', sans-serif;
+    flex-shrink: 0;
+  }
+  .flow-num.green { background: var(--green); }
+  .flow-label { font-size: 11px; font-weight: 600; color: var(--dark); text-align: center; max-width: 70px; line-height: 1.3; }
+  .flow-arrow { font-size: 20px; color: var(--orange); padding: 0 8px; margin-bottom: 20px; flex-shrink: 0; }
+
+  /* SCREENS GRID */
+  .screens-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .screen-card { border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+  .screen-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+  .screen-preview {
+    background: var(--gray-light); height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .phone-mock {
+    width: 80px; height: 160px; background: white; border-radius: 12px;
+    border: 2px solid #ddd; overflow: hidden; display: flex; flex-direction: column;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  .phone-screen { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  /* Splash */
+  .ps-splash { background: var(--orange); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .ps-splash-circle { width: 20px; height: 20px; background: white; border-radius: 50%; }
+  .ps-splash-text { font-size: 6px; font-weight: 800; color: white; font-family: 'Syne', sans-serif; }
+  .ps-splash-sub { font-size: 4px; color: rgba(255,255,255,0.7); }
+  /* Onboarding */
+  .ps-onboard { flex: 1; display: flex; flex-direction: column; padding: 6px; background: white; }
+  .ps-onboard-img { background: var(--gray-light); border-radius: 4px; height: 50px; margin-bottom: 4px; }
+  .ps-onboard-t1 { background: var(--dark); height: 5px; border-radius: 2px; width: 80%; margin-bottom: 3px; }
+  .ps-onboard-t2 { background: var(--gray-light); height: 4px; border-radius: 2px; width: 60%; margin-bottom: 6px; }
+  .ps-onboard-btn { background: var(--orange); border-radius: 100px; height: 14px; }
+  /* Home */
+  .ps-home { flex: 1; display: flex; flex-direction: column; background: white; }
+  .ps-home-nav { background: var(--dark); height: 12px; display: flex; align-items: center; padding: 0 4px; }
+  .ps-home-nav-dot { width: 3px; height: 3px; background: var(--orange); border-radius: 50%; }
+  .ps-home-body { padding: 4px; display: flex; flex-direction: column; gap: 3px; }
+  .ps-home-search { background: var(--gray-light); border-radius: 3px; height: 10px; }
+  .ps-home-cats { display: flex; gap: 2px; }
+  .ps-home-cat { background: var(--orange-pale); border-radius: 100px; height: 8px; flex: 1; }
+  .ps-home-cat.active { background: var(--orange); }
+  .ps-home-cards { display: flex; gap: 2px; }
+  .ps-home-card { background: var(--gray-light); border-radius: 3px; flex: 1; height: 40px; }
+  /* Restaurant */
+  .ps-rest { flex: 1; display: flex; flex-direction: column; background: white; }
+  .ps-rest-header { background: linear-gradient(135deg, #1a0800, #2a1000); height: 30px; }
+  .ps-rest-tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 4px; }
+  .ps-rest-tab { flex: 1; height: 10px; display: flex; align-items: center; justify-content: center; }
+  .ps-rest-tab-dot { background: var(--gray-light); height: 4px; width: 20px; border-radius: 2px; }
+  .ps-rest-tab.active .ps-rest-tab-dot { background: var(--orange); }
+  .ps-rest-items { padding: 4px; display: flex; flex-direction: column; gap: 3px; }
+  .ps-rest-item { display: flex; gap: 3px; align-items: center; }
+  .ps-rest-img { width: 18px; height: 18px; background: var(--gray-light); border-radius: 3px; }
+  .ps-rest-text { flex: 1; }
+  .ps-rest-t1 { background: var(--gray-light); height: 4px; border-radius: 2px; width: 80%; margin-bottom: 2px; }
+  .ps-rest-t2 { background: var(--gray-light); height: 3px; border-radius: 2px; width: 50%; }
+  .ps-rest-add { background: var(--orange); width: 12px; height: 12px; border-radius: 3px; }
+  /* Cart */
+  .ps-cart { flex: 1; display: flex; flex-direction: column; background: white; padding: 4px; gap: 3px; }
+  .ps-cart-title { background: var(--dark); height: 6px; border-radius: 2px; width: 40%; }
+  .ps-cart-item { display: flex; gap: 3px; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 3px; }
+  .ps-cart-img { width: 16px; height: 16px; background: var(--gray-light); border-radius: 3px; }
+  .ps-cart-text { flex: 1; }
+  .ps-cart-t1 { background: var(--gray-light); height: 4px; border-radius: 2px; width: 70%; margin-bottom: 2px; }
+  .ps-cart-price { background: var(--orange); height: 4px; border-radius: 2px; width: 30%; }
+  .ps-cart-total { background: var(--orange-pale); border-radius: 4px; height: 20px; }
+  .ps-cart-btn { background: var(--orange); border-radius: 100px; height: 12px; }
+  /* Checkout */
+  .ps-checkout { flex: 1; display: flex; flex-direction: column; background: white; padding: 4px; gap: 3px; }
+  .ps-steps { display: flex; gap: 2px; align-items: center; margin-bottom: 2px; }
+  .ps-step { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+  .ps-step.inactive { background: var(--gray-light); }
+  .ps-step-line { flex: 1; height: 1px; background: var(--border); }
+  .ps-step-line.done { background: var(--orange); }
+  .ps-field { background: var(--gray-light); border-radius: 3px; height: 10px; }
+  .ps-pay { display: flex; gap: 2px; }
+  .ps-pay-opt { flex: 1; background: var(--gray-light); border-radius: 3px; height: 14px; }
+  .ps-pay-opt.selected { background: var(--orange-pale); border: 1px solid var(--orange); }
+  .ps-checkout-btn { background: var(--orange); border-radius: 100px; height: 12px; margin-top: auto; }
+  /* Confirmed */
+  .ps-confirmed { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: white; padding: 4px; }
+  .ps-confirmed-circle { width: 24px; height: 24px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; }
+  .ps-confirmed-check { color: white; font-size: 12px; }
+  .ps-confirmed-t1 { background: var(--dark); height: 5px; border-radius: 2px; width: 70%; }
+  .ps-confirmed-t2 { background: var(--gray-light); height: 4px; border-radius: 2px; width: 50%; }
+  .ps-confirmed-btn { background: var(--orange); border-radius: 100px; height: 12px; width: 80%; }
+  /* Tracking */
+  .ps-tracking { flex: 1; display: flex; flex-direction: column; background: white; }
+  .ps-track-map { background: linear-gradient(135deg, #e8f0e8, #d4e8d4); height: 50px; position: relative; }
+  .ps-track-pin { position: absolute; top: 30%; right: 30%; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; border: 1px solid white; }
+  .ps-track-dest { position: absolute; bottom: 25%; left: 25%; width: 5px; height: 5px; background: var(--green); border-radius: 50%; border: 1px solid white; }
+  .ps-track-body { padding: 4px; display: flex; flex-direction: column; gap: 3px; }
+  .ps-track-driver { display: flex; gap: 3px; align-items: center; }
+  .ps-track-avatar { width: 14px; height: 14px; border-radius: 50%; background: var(--gray-light); }
+  .ps-track-info { flex: 1; }
+  .ps-track-t1 { background: var(--gray-light); height: 4px; border-radius: 2px; width: 60%; margin-bottom: 2px; }
+  .ps-track-t2 { background: var(--gray-light); height: 3px; border-radius: 2px; width: 40%; }
+  .ps-track-prog { display: flex; flex-direction: column; gap: 2px; }
+  .ps-track-step { display: flex; gap: 3px; align-items: center; }
+  .ps-track-dot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+  .ps-track-bar { background: var(--gray-light); height: 3px; border-radius: 2px; flex: 1; }
+
+  .screen-info { padding: 16px 18px; }
+  .screen-num { font-size: 10px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .screen-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .screen-desc { font-size: 12px; color: var(--gray); line-height: 1.4; margin-bottom: 10px; }
+  .screen-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .screen-tag { background: var(--gray-light); color: var(--dark); font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 100px; }
+
+  /* INTERACTIONS */
+  .interactions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .interaction-card { border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+  .interaction-icon { font-size: 32px; margin-bottom: 16px; }
+  .interaction-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .interaction-desc { font-size: 14px; color: var(--gray); line-height: 1.6; margin-bottom: 16px; }
+  .interaction-tag { display: inline-block; background: var(--orange-pale); color: var(--orange); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 100px; }
+
+  /* USER TESTING */
+  .testing-table { width: 100%; border-collapse: collapse; }
+  .testing-table th { background: var(--dark); color: white; padding: 14px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; text-align: left; }
+  .testing-table th:first-child { border-radius: 8px 0 0 0; }
+  .testing-table th:last-child { border-radius: 0 8px 0 0; }
+  .testing-table td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .testing-table tr:nth-child(even) td { background: var(--orange-pale); }
+  .status-pass { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; background: #E8F5E9; color: #2E7D32; }
+  .status-improve { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; background: #FFF3CD; color: #856404; }
+
+  /* FIGMA CTA */
+  .figma-cta-section {
+    background: var(--dark); border-radius: 24px; padding: 64px;
+    text-align: center; margin: 0 60px; position: relative; overflow: hidden;
+  }
+  .figma-cta-section::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,107,33,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .figma-cta-section h2 { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; color: white; margin-bottom: 16px; }
+  .figma-cta-section h2 span { color: var(--orange); }
+  .figma-cta-section p { color: rgba(255,255,255,0.5); font-size: 16px; margin-bottom: 40px; font-weight: 300; }
+  .figma-btn { display: inline-flex; align-items: center; gap: 12px; background: var(--orange); color: white; padding: 18px 40px; border-radius: 100px; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+  .figma-btn:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,33,0.4); }
+
+  /* REFINEMENTS */
+  .refinements-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .refinement-card { border: 1px solid var(--border); border-radius: 16px; padding: 28px; display: flex; gap: 16px; }
+  .ref-num { width: 40px; height: 40px; border-radius: 50%; background: var(--orange-pale); color: var(--orange); display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: 'Syne', sans-serif; flex-shrink: 0; }
+  .ref-content {}
+  .ref-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .ref-desc { font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+  /* FOOTER */
+  .footer { background: var(--dark); padding: 48px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: white; margin-bottom: 8px; }
+  .footer-logo span { color: var(--orange); }
+  .footer-sub { font-size: 13px; color: rgba(255,255,255,0.35); }
+  .footer-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .footer-tag { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 500; padding: 6px 14px; border-radius: 100px; }
+
+  @media (max-width: 768px) {
+    section { padding: 60px 20px; }
+    .hero { padding: 60px 20px; }
+    .sticky-nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .screens-grid { grid-template-columns: repeat(2, 1fr); }
+    .interactions-grid { grid-template-columns: 1fr; }
+    .refinements-grid { grid-template-columns: 1fr; }
+    .figma-cta-section { margin: 0 20px; padding: 40px 24px; }
+    .footer { padding: 40px 20px; flex-direction: column; }
+    .flow-container { gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="week-badge">Thiranex UI/UX Internship · Week 3</div>
+  <div class="hero-tag">Interactive Prototype Creation</div>
+  <h1>Food<span>Rush</span><br/>Interactive<br/>Prototype</h1>
+  <p class="hero-desc">A fully clickable interactive prototype of the FoodRush food delivery app — 8 screens connected with smooth transitions, navigation flows, and real user interactions.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-label">Intern</span><span class="meta-value">Teku Triveni</span></div>
+    <div class="meta-item"><span class="meta-label">Domain</span><span class="meta-value">UI/UX Design</span></div>
+    <div class="meta-item"><span class="meta-label">Week</span><span class="meta-value">Week 3</span></div>
+    <div class="meta-item"><span class="meta-label">Submitted</span><span class="meta-value">21 June 2026</span></div>
+    <div class="meta-item"><span class="meta-label">Tool</span><span class="meta-value">Figma Prototype</span></div>
+    <div class="meta-item"><span class="meta-label">Screens</span><span class="meta-value">8 Connected</span></div>
+  </div>
+  <div class="hero-btns">
+    <a href="https://www.figma.com/proto/1Kx5rGvOkhfpDmahPYPEy9/Mobile-app-Wireframing?node-id=5-4&p=f&t=7YgdpUEk9evKCJ6g-1&scaling=min-zoom&content-scaling=fixed&page-id=2%3A2&starting-point-node-id=5%3A4" target="_blank" class="btn-primary">▶ Launch Prototype</a>
+    <a href="https://www.figma.com/design/1Kx5rGvOkhfpDmahPYPEy9/Mobile-app-Wireframing" target="_blank" class="btn-secondary">View Figma File →</a>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="sticky-nav">
+  <div class="nav-logo">Food<span>Rush</span></div>
+  <div class="nav-links">
+    <a href="#flow">User Flow</a>
+    <a href="#screens">Screens</a>
+    <a href="#interactions">Interactions</a>
+    <a href="#testing">User Testing</a>
+    <a href="#prototype">Prototype</a>
+  </div>
+  <span class="nav-badge">Week 3</span>
+</nav>
+
+<!-- USER FLOW -->
+<section id="flow">
+  <div class="section-label">Navigation Architecture</div>
+  <h2 class="section-title">Prototype Flow</h2>
+  <p class="section-sub">Complete user journey from app launch to order tracking — 8 screens connected with click interactions.</p>
+  <div class="flow-container">
+    <div class="flow-screen"><div class="flow-num">01</div><div class="flow-label">Splash Screen</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-screen"><div class="flow-num">02</div><div class="flow-label">Onboarding</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-screen"><div class="flow-num">03</div><div class="flow-label">Home Screen</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-screen"><div class="flow-num">04</div><div class="flow-label">Restaurant Detail</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-screen"><div class="flow-num">05</div><div class="flow-label">Cart</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-screen"><div class="flow-num">06</div><div class="flow-label">Checkout</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-screen"><div class="flow-num green">07</div><div class="flow-label">Order Confirmed</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-screen"><div class="flow-num green">08</div><div class="flow-label">Order Tracking</div></div>
+  </div>
+</section>
+
+<!-- SCREENS -->
+<section id="screens">
+  <div class="section-label">All Screens</div>
+  <h2 class="section-title">8 Interactive Screens</h2>
+  <p class="section-sub">Every screen designed and connected with click interactions and Dissolve transitions.</p>
+  <div class="screens-grid">
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-splash">
+              <div class="ps-splash-circle"></div>
+              <div class="ps-splash-text">FoodRush</div>
+              <div class="ps-splash-sub">Deliver happiness, fast.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 01</div>
+        <div class="screen-name">Splash Screen</div>
+        <div class="screen-desc">App launch screen with FoodRush branding and loading animation.</div>
+        <div class="screen-tags"><span class="screen-tag">Branding</span><span class="screen-tag">Auto-navigate</span></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-onboard">
+              <div class="ps-onboard-img"></div>
+              <div class="ps-onboard-t1"></div>
+              <div class="ps-onboard-t2"></div>
+              <div class="ps-onboard-btn"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 02</div>
+        <div class="screen-name">Onboarding</div>
+        <div class="screen-desc">Welcome screen with app value proposition and Get Started CTA.</div>
+        <div class="screen-tags"><span class="screen-tag">CTA Button</span><span class="screen-tag">Dissolve</span></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-home">
+              <div class="ps-home-nav"><div class="ps-home-nav-dot"></div></div>
+              <div class="ps-home-body">
+                <div class="ps-home-search"></div>
+                <div class="ps-home-cats">
+                  <div class="ps-home-cat active"></div>
+                  <div class="ps-home-cat"></div>
+                  <div class="ps-home-cat"></div>
+                </div>
+                <div class="ps-home-cards">
+                  <div class="ps-home-card"></div>
+                  <div class="ps-home-card"></div>
+                </div>
+                <div class="ps-home-cards">
+                  <div class="ps-home-card"></div>
+                  <div class="ps-home-card"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 03</div>
+        <div class="screen-name">Home Screen</div>
+        <div class="screen-desc">Restaurant listings, category filters, search bar and promotions.</div>
+        <div class="screen-tags"><span class="screen-tag">Search</span><span class="screen-tag">Categories</span></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-rest">
+              <div class="ps-rest-header"></div>
+              <div class="ps-rest-tabs">
+                <div class="ps-rest-tab active"><div class="ps-rest-tab-dot"></div></div>
+                <div class="ps-rest-tab"><div class="ps-rest-tab-dot"></div></div>
+                <div class="ps-rest-tab"><div class="ps-rest-tab-dot"></div></div>
+              </div>
+              <div class="ps-rest-items">
+                <div class="ps-rest-item"><div class="ps-rest-img"></div><div class="ps-rest-text"><div class="ps-rest-t1"></div><div class="ps-rest-t2"></div></div><div class="ps-rest-add"></div></div>
+                <div class="ps-rest-item"><div class="ps-rest-img"></div><div class="ps-rest-text"><div class="ps-rest-t1"></div><div class="ps-rest-t2"></div></div><div class="ps-rest-add"></div></div>
+                <div class="ps-rest-item"><div class="ps-rest-img"></div><div class="ps-rest-text"><div class="ps-rest-t1"></div><div class="ps-rest-t2"></div></div><div class="ps-rest-add"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 04</div>
+        <div class="screen-name">Restaurant Detail</div>
+        <div class="screen-desc">Menu items with categories, ratings, and quick add-to-cart buttons.</div>
+        <div class="screen-tags"><span class="screen-tag">Menu</span><span class="screen-tag">Add to Cart</span></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-cart">
+              <div class="ps-cart-title"></div>
+              <div class="ps-cart-item"><div class="ps-cart-img"></div><div class="ps-cart-text"><div class="ps-cart-t1"></div><div class="ps-cart-price"></div></div></div>
+              <div class="ps-cart-item"><div class="ps-cart-img"></div><div class="ps-cart-text"><div class="ps-cart-t1"></div><div class="ps-cart-price"></div></div></div>
+              <div class="ps-cart-total"></div>
+              <div class="ps-cart-btn"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 05</div>
+        <div class="screen-name">Cart</div>
+        <div class="screen-desc">Order summary with item list, bill details and proceed to checkout CTA.</div>
+        <div class="screen-tags"><span class="screen-tag">Order Summary</span><span class="screen-tag">Bill</span></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-checkout">
+              <div class="ps-steps">
+                <div class="ps-step"></div>
+                <div class="ps-step-line done"></div>
+                <div class="ps-step"></div>
+                <div class="ps-step-line"></div>
+                <div class="ps-step inactive"></div>
+              </div>
+              <div class="ps-field"></div>
+              <div class="ps-field"></div>
+              <div class="ps-pay">
+                <div class="ps-pay-opt selected"></div>
+                <div class="ps-pay-opt"></div>
+                <div class="ps-pay-opt"></div>
+              </div>
+              <div class="ps-checkout-btn"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 06</div>
+        <div class="screen-name">Checkout</div>
+        <div class="screen-desc">Delivery address, payment method selection and order total confirmation.</div>
+        <div class="screen-tags"><span class="screen-tag">Address</span><span class="screen-tag">Payment</span></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-confirmed">
+              <div class="ps-confirmed-circle"><div class="ps-confirmed-check">✓</div></div>
+              <div class="ps-confirmed-t1"></div>
+              <div class="ps-confirmed-t2"></div>
+              <div class="ps-confirmed-btn"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 07</div>
+        <div class="screen-name">Order Confirmed</div>
+        <div class="screen-desc">Success screen with order details, ETA and Track My Order CTA.</div>
+        <div class="screen-tags"><span class="screen-tag">Success</span><span class="screen-tag">ETA</span></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-preview">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="ps-tracking">
+              <div class="ps-track-map">
+                <div class="ps-track-pin"></div>
+                <div class="ps-track-dest"></div>
+              </div>
+              <div class="ps-track-body">
+                <div class="ps-track-driver">
+                  <div class="ps-track-avatar"></div>
+                  <div class="ps-track-info">
+                    <div class="ps-track-t1"></div>
+                    <div class="ps-track-t2"></div>
+                  </div>
+                </div>
+                <div class="ps-track-prog">
+                  <div class="ps-track-step"><div class="ps-track-dot" style="background:var(--green);"></div><div class="ps-track-bar" style="background:var(--green);opacity:0.3;"></div></div>
+                  <div class="ps-track-step"><div class="ps-track-dot" style="background:var(--orange);"></div><div class="ps-track-bar" style="background:var(--orange);opacity:0.3;"></div></div>
+                  <div class="ps-track-step"><div class="ps-track-dot" style="background:var(--border);"></div><div class="ps-track-bar"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-info">
+        <div class="screen-num">Screen 08</div>
+        <div class="screen-name">Order Tracking</div>
+        <div class="screen-desc">Live map, driver info, real-time progress and ETA countdown.</div>
+        <div class="screen-tags"><span class="screen-tag">Live Map</span><span class="screen-tag">Progress</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INTERACTIONS -->
+<section id="interactions">
+  <div class="section-label">Animations & Transitions</div>
+  <h2 class="section-title">Interaction Design</h2>
+  <p class="section-sub">Every tap, transition, and animation carefully designed for a natural mobile experience.</p>
+  <div class="interactions-grid">
+    <div class="interaction-card">
+      <div class="interaction-icon">👆</div>
+      <div class="interaction-title">On Click Trigger</div>
+      <div class="interaction-desc">All screen transitions triggered by user tap/click interactions — simulating real mobile app behavior with natural response.</div>
+      <span class="interaction-tag">On Click</span>
+    </div>
+    <div class="interaction-card">
+      <div class="interaction-icon">✨</div>
+      <div class="interaction-title">Dissolve Transition</div>
+      <div class="interaction-desc">Smooth Dissolve animation between all screens — creating a polished, modern feel that matches premium food delivery apps.</div>
+      <span class="interaction-tag">Dissolve Animation</span>
+    </div>
+    <div class="interaction-card">
+      <div class="interaction-icon">🔗</div>
+      <div class="interaction-title">Navigate To Action</div>
+      <div class="interaction-desc">Each screen connected to the next using Figma's Navigate To action — creating a complete end-to-end user journey flow.</div>
+      <span class="interaction-tag">Navigate To</span>
+    </div>
+    <div class="interaction-card">
+      <div class="interaction-icon">📱</div>
+      <div class="interaction-title">Mobile Frame</div>
+      <div class="interaction-desc">Prototype built on iOS/Android 390×844px frame — matching real device dimensions for accurate usability testing.</div>
+      <span class="interaction-tag">390×844px</span>
+    </div>
+    <div class="interaction-card">
+      <div class="interaction-icon">🎯</div>
+      <div class="interaction-title">Flow Starting Point</div>
+      <div class="interaction-desc">Splash Screen set as Flow 1 starting point — ensuring testers always begin from the correct entry point of the app.</div>
+      <span class="interaction-tag">Flow 1</span>
+    </div>
+    <div class="interaction-card">
+      <div class="interaction-icon">🔄</div>
+      <div class="interaction-title">Complete User Journey</div>
+      <div class="interaction-desc">Full end-to-end flow from Splash → Onboarding → Order Tracking — covering all 8 critical screens in one continuous journey.</div>
+      <span class="interaction-tag">8 Screens</span>
+    </div>
+  </div>
+</section>
+
+<!-- USER TESTING -->
+<section id="testing">
+  <div class="section-label">Usability Research</div>
+  <h2 class="section-title">User Testing Results</h2>
+  <p class="section-sub">Quick user testing conducted on the interactive prototype with 3 participants to validate the navigation flow.</p>
+  <table class="testing-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Test Scenario</th>
+        <th>Task Given</th>
+        <th>Result</th>
+        <th>Feedback</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Onboarding Flow</strong></td><td>Launch app and reach Home Screen</td><td><span class="status-pass">✓ Pass</span></td><td>Smooth, clear CTA button</td></tr>
+      <tr><td>2</td><td><strong>Restaurant Discovery</strong></td><td>Find and open a restaurant from Home</td><td><span class="status-pass">✓ Pass</span></td><td>Category filters are helpful</td></tr>
+      <tr><td>3</td><td><strong>Add to Cart</strong></td><td>Add 2 items and go to cart</td><td><span class="status-pass">✓ Pass</span></td><td>Add button is easy to find</td></tr>
+      <tr><td>4</td><td><strong>Checkout Flow</strong></td><td>Complete checkout with address & payment</td><td><span class="status-improve">⚡ Improve</span></td><td>Address form needs auto-fill</td></tr>
+      <tr><td>5</td><td><strong>Order Confirmation</strong></td><td>Confirm order and view tracking</td><td><span class="status-pass">✓ Pass</span></td><td>Green success screen feels satisfying</td></tr>
+      <tr><td>6</td><td><strong>Overall Navigation</strong></td><td>Rate ease of navigation 1-5</td><td><span class="status-pass">4.2 / 5</span></td><td>Clean and intuitive flow</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- REFINEMENTS -->
+<section>
+  <div class="section-label">Post-Testing Improvements</div>
+  <h2 class="section-title">Design Refinements</h2>
+  <p class="section-sub">Key improvements identified from user testing feedback.</p>
+  <div class="refinements-grid">
+    <div class="refinement-card">
+      <div class="ref-num">1</div>
+      <div class="ref-content">
+        <div class="ref-title">Address Auto-fill</div>
+        <div class="ref-desc">Users found address form tedious. Plan to add saved addresses and GPS auto-detect in next iteration to speed up checkout.</div>
+      </div>
+    </div>
+    <div class="refinement-card">
+      <div class="ref-num">2</div>
+      <div class="ref-content">
+        <div class="ref-title">Back Navigation</div>
+        <div class="ref-desc">Add back button interactions to allow users to navigate backwards — improving freedom and control per Nielsen's heuristics.</div>
+      </div>
+    </div>
+    <div class="refinement-card">
+      <div class="ref-num">3</div>
+      <div class="ref-content">
+        <div class="ref-title">Micro-animations</div>
+        <div class="ref-desc">Add subtle micro-animations on Add to Cart button — visual feedback confirming item was added improves user confidence.</div>
+      </div>
+    </div>
+    <div class="refinement-card">
+      <div class="ref-num">4</div>
+      <div class="ref-content">
+        <div class="ref-title">Search Interaction</div>
+        <div class="ref-desc">Connect search bar to a search results screen — users expect real-time filtering when they type in the search box.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOTYPE CTA -->
+<div id="prototype" style="padding:80px 0;">
+  <div class="figma-cta-section">
+    <h2>Try the <span>Live</span> Prototype</h2>
+    <p>Click through all 8 screens — experience the complete FoodRush app flow.</p>
+    <a href="https://www.figma.com/proto/1Kx5rGvOkhfpDmahPYPEy9/Mobile-app-Wireframing?node-id=5-4&p=f&t=7YgdpUEk9evKCJ6g-1&scaling=min-zoom&content-scaling=fixed&page-id=2%3A2&starting-point-node-id=5%3A4" target="_blank" class="figma-btn">▶ Launch FoodRush Prototype</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>
+    <div class="footer-logo">Food<span>Rush</span></div>
+    <div class="footer-sub">Thiranex Internship · Week 3: Interactive Prototype · Teku Triveni · 21 June 2026</div>
+  </div>
+  <div class="footer-tags">
+    <span class="footer-tag">Figma</span>
+    <span class="footer-tag">Interactive Prototype</span>
+    <span class="footer-tag">User Testing</span>
+    <span class="footer-tag">8 Screens</span>
+    <span class="footer-tag">Dissolve Transitions</span>
+  </div>
+</footer>
+
+</body>
+</html>

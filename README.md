@@ -1,7 +1,7 @@
 # 🍔 FoodRush — UI/UX Design Internship @ Thiranex
 
 ![FoodRush Banner](https://img.shields.io/badge/FoodRush-UI%2FUX%20Design-FF6B21?style=for-the-badge&logo=figma&logoColor=white)
-![Week](https://img.shields.io/badge/Week-1%20%7C%202%20%7C%203-0F0F0F?style=for-the-badge)
+![Week](https://img.shields.io/badge/Week-1%20%7C%202%20%7C%203%20%7C%204-0F0F0F?style=for-the-badge)
 ![Intern](https://img.shields.io/badge/Intern-Teku%20Triveni-FF6B21?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Completed-2EB872?style=for-the-badge)
 
@@ -21,7 +21,7 @@
 
 ## 📁 Project — FoodRush Food Delivery App
 
-> A complete UI/UX design project for **FoodRush** — a food delivery platform. From low-fidelity mobile wireframes to high-fidelity website redesign to a fully interactive clickable prototype.
+> A complete UI/UX design project for **FoodRush** — a food delivery platform. From low-fidelity mobile wireframes to high-fidelity website redesign to a fully interactive prototype with usability testing & analysis.
 
 ---
 
@@ -111,19 +111,46 @@ Build a fully clickable interactive prototype to simulate real app interactions 
 | Frame Size | 390×844px (iOS/Android) |
 | Starting Point | 01 Splash Screen (Flow 1) |
 
-### 🧪 User Testing Results
-| Scenario | Result |
-|----------|--------|
-| Onboarding Flow | ✅ Pass |
-| Restaurant Discovery | ✅ Pass |
-| Add to Cart | ✅ Pass |
-| Checkout Flow | ⚡ Needs Improvement |
-| Order Confirmation | ✅ Pass |
-| Overall Navigation | ⭐ 4.2 / 5 |
-
 ### 🔗 Links
 - 📐 **Figma Prototype** → [Launch Prototype](https://www.figma.com/proto/1Kx5rGvOkhfpDmahPYPEy9/Mobile-app-Wireframing?node-id=5-4&p=f&t=7YgdpUEk9evKCJ6g-1&scaling=min-zoom&content-scaling=fixed&page-id=2%3A2&starting-point-node-id=5%3A4)
 - 🌐 **Live Submission** → [View Page](https://tekutriveni.github.io/THIRANEX-INTERNSHIP-/week3_prototype.html)
+
+---
+
+## ✅ Week 4 — Usability Testing & Analysis
+
+### 🎯 Objective
+Conduct usability testing on the FoodRush prototype, analyze results, and provide design improvement recommendations.
+
+### 🔍 Key Deliverables
+- ✅ Usability Test Plan & 6 Scenarios
+- ✅ 5 Participants Recruited & Tested
+- ✅ Observations Recorded for all tasks
+- ✅ Usability Metrics Analysis
+- ✅ 8 Design Improvement Suggestions
+
+### 📊 Testing Results
+| Metric | Result | Status |
+|--------|--------|--------|
+| Task Success Rate | 96% | ✅ Excellent |
+| User Satisfaction | 4.1 / 5.0 | ✅ Good |
+| Avg Task Time | 63 seconds | ✅ Good |
+| Error Rate | 1.2 per task | ✅ Acceptable |
+| Checkout Drop-off | 20% | ⚠️ Needs Fix |
+| Net Promoter Score | 72 | ✅ Good |
+
+### 🔧 Top Improvements Identified
+| # | Finding | Priority |
+|---|---------|----------|
+| 1 | Checkout form too long — add saved addresses | 🔴 High |
+| 2 | No visual feedback on Add to Cart | 🔴 High |
+| 3 | Payment options not differentiated | 🔴 High |
+| 4 | Search bar not prominent enough | 🟡 Medium |
+| 5 | Category filter tabs too small | 🟡 Medium |
+
+### 🔗 Links
+- 🌐 **Live Submission** → [View Page](https://tekutriveni.github.io/THIRANEX-INTERNSHIP-/week4_usability.html)
+- 📐 **Prototype Tested** → [Launch Prototype](https://www.figma.com/proto/1Kx5rGvOkhfpDmahPYPEy9/Mobile-app-Wireframing?node-id=5-4&p=f&t=7YgdpUEk9evKCJ6g-1&scaling=min-zoom&content-scaling=fixed&page-id=2%3A2&starting-point-node-id=5%3A4)
 
 ---
 
@@ -132,8 +159,8 @@ Build a fully clickable interactive prototype to simulate real app interactions 
 ```
 Empathize → Define → Ideate → Prototype → Test
     ↓           ↓        ↓          ↓         ↓
- Research   Problem   Layouts   Figma    User Testing
-  Users     Statement  Explore  Mockups   & Refinement
+ Research   Problem   Layouts   Figma    Usability
+  Users     Statement  Explore  Mockups   Testing
 ```
 
 ---
